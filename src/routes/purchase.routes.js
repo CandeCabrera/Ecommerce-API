@@ -4,39 +4,23 @@ const authenticate = require('../middlewares/auth.middleware');
 
 const router = Router();
 
+
 /**
  * @openapi
- * /api/v1/purchase/{userId}:
- *   post:
- *     summary: Buy products in cart
- *     tags: [Purchase]
- *     responses:
- *       200:
- *         description: Accepted
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                   example: OK
- *                 data:
- *                   type: array
- *                   schema:
- *                     $ref: "#/components/schemas/purchase"
  * /api/v1/purchases/{userId}:
  *   get:
- *     summary: Get all your purchases
- *     tags: [Purchase]
+ *     security:
+ *       - bearerAuth: []
+ *     summary: Get all purchases from user
+ *     tags: [Purchases]
  *     parameters:
- *       - name: userId
- *         in: path
- *         description: inserta user id
+ *       - in: path
+ *         name: userId
  *         required: true
  *         schema:
  *           type: integer
- *           format: int64
+ *           minimum: 1
+ *         description: user Id
  *     responses:
  *       200:
  *         description: OK
@@ -50,8 +34,35 @@ const router = Router();
  *                   example: OK
  *                 data:
  *                   type: array
- *                   schema:
- *                     $ref: "#/components/schemas/getAllPurchases"
+ *                   items: {}
+ * /api/v1/purchase/{userId}:
+ *   post:
+ *     security:
+ *       - bearerAuth: []
+ *     summary: Buy products from your cart
+ *     tags: [Purchases]
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *         description: user Id
+ *     responses:
+ *       200:
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: OK
+ *                 data:
+ *                   type: array
+ *                   items: {}
  */
 
 router.post('/purchase/:userId', authenticate, purchase);

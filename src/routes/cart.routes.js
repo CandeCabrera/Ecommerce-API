@@ -4,44 +4,23 @@ const { addToCart, getAllProductsInCart } = require('../controllers');
 
 const router = Router ();
 
+
 /**
  * @openapi
- * /api/v1/cart/{userId}:
- *   post:
- *     summary: Add a product to cart 
- *     tags: [Cart]
- *     requestBody:
- *       description: To add a product to cart you need the quantity and the product id
- *       content:
- *         application/json:
- *           schema:
- *             $ref: "#/components/schemas/cart"
- *     responses:
- *       201:
- *         description: Created
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                   example: OK
- *                 data:
- *                   type: array
- *                   items:
- *                     $ref: "#/components/schemas/addToCart"
  * /api/v1/cart/products/{userId}:
  *   get:
- *     summary: Get all products in cart 
+ *     security:
+ *       - bearerAuth: []
+ *     summary: Get all products from the cart
  *     tags: [Cart]
- *     requestBody:
- *       description: To get and see all the products in cart
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: "#/components/schemas/cart"
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *         description: user Id
  *     responses:
  *       200:
  *         description: OK
@@ -55,8 +34,49 @@ const router = Router ();
  *                   example: OK
  *                 data:
  *                   type: array
- *                   items:
- *                     $ref: "#/components/schemas/getAllProductsInCart"
+ *                   items: {}
+ * /api/v1/cart/{userId}:
+ *   post:
+ *     security:
+ *       - bearerAuth: []
+ *     summary: Add products to your cart
+ *     tags: [Cart]
+ *     requestBody:
+ *       description: To get and see all the products in cart
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               quantity:
+ *                 type: integer
+ *                 example: 4
+ *               productId:
+ *                 type: integer
+ *                 example: 2
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *         description: user Id
+ *     responses:
+ *       200:
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: OK
+ *                 data:
+ *                   type: array
+ *                   items: {}
  */
 
 router.post('/cart/:userId',authenticate, addToCart);
